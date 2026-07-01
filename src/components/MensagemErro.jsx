@@ -4,9 +4,10 @@ function MensagemErro({ mensagem }) {
   return (
     <div
       role="alert"
-      className="rounded-lg border border-red-300 bg-red-50 text-red-700 px-4 py-3 text-sm"
+      className="flex items-start gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700"
     >
-      {mensagem}
+      <span aria-hidden="true">⚠️</span>
+      <span>{mensagem}</span>
     </div>
   )
 }

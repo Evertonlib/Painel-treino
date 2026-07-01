@@ -14,7 +14,7 @@ export default defineConfig({
         name: 'Treino do Dia',
         short_name: 'Treino do Dia',
         description: 'Consulta rápida do treino de hoje e amanhã do seu ciclo.',
-        theme_color: '#2563eb',
+        theme_color: '#4f46e5',
         background_color: '#ffffff',
         display: 'standalone',
         start_url: '/Painel-treino/',

@@ -46,7 +46,7 @@ function BotaoCarregarCiclo({ onCarregado, onErro, texto = 'Carregar ciclo', cla
         onClick={() => inputRef.current?.click()}
         className={
           className ||
-          'rounded-lg bg-blue-600 text-white font-semibold px-4 py-3 active:bg-blue-700'
+          'rounded-full bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm shadow-indigo-200 transition-colors active:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2'
         }
       >
         {texto}
