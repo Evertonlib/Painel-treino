@@ -14,8 +14,8 @@ export default defineConfig({
         name: 'Treino do Dia',
         short_name: 'Treino do Dia',
         description: 'Consulta rápida do treino de hoje e amanhã do seu ciclo.',
-        theme_color: '#4f46e5',
-        background_color: '#ffffff',
+        theme_color: '#14171b',
+        background_color: '#14171b',
         display: 'standalone',
         start_url: '/Painel-treino/',
         scope: '/Painel-treino/',
@@ -33,7 +33,10 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
+        // .woff2 é suficiente para os navegadores modernos alvo do app (ver
+        // PRD, seção "Premissas assumidas"); os .woff continuam no build
+        // como fallback servido sob demanda, mas não entram no precache.
+        globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2}'],
       },
     }),
   ],

@@ -8,6 +8,8 @@ import CartaoTreino from './components/CartaoTreino.jsx'
 import CartaoCicloForaDoIntervalo from './components/CartaoCicloForaDoIntervalo.jsx'
 import ListaCicloCompleto from './components/ListaCicloCompleto.jsx'
 import MensagemErro from './components/MensagemErro.jsx'
+import FaseCiclo from './components/FaseCiclo.jsx'
+import { IconePista } from './components/icones.jsx'
 
 function ordenarRegistros(registros) {
   const validos = registros
@@ -15,6 +17,18 @@ function ordenarRegistros(registros) {
     .sort((a, b) => a.dataISO.localeCompare(b.dataISO))
   const invalidos = registros.filter((registro) => !registro.dataValida)
   return [...validos, ...invalidos]
+}
+
+function fasesEmOrdem(registrosValidos) {
+  const vistas = new Set()
+  const fases = []
+  for (const registro of registrosValidos) {
+    if (!vistas.has(registro.fase)) {
+      vistas.add(registro.fase)
+      fases.push(registro.fase)
+    }
+  }
+  return fases
 }
 
 function ConteudoPrincipal({ registrosValidos }) {
@@ -25,14 +39,10 @@ function ConteudoPrincipal({ registrosValidos }) {
   const amanhaISO = localParaDataISO(amanhaLocal())
 
   if (hojeISO < inicio.dataISO) {
-    return (
-      <CartaoCicloForaDoIntervalo variante="antes" dataInicio={inicio.dataTexto} />
-    )
+    return <CartaoCicloForaDoIntervalo variante="antes" dataInicio={inicio.dataTexto} />
   }
   if (hojeISO > fim.dataISO) {
-    return (
-      <CartaoCicloForaDoIntervalo variante="depois" dataFim={fim.dataTexto} />
-    )
+    return <CartaoCicloForaDoIntervalo variante="depois" dataFim={fim.dataTexto} />
   }
 
   const registroHoje = registrosValidos.find((r) => r.dataISO === hojeISO)
@@ -40,12 +50,13 @@ function ConteudoPrincipal({ registrosValidos }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <CartaoTreino rotulo="Hoje" registro={registroHoje} />
+      <CartaoTreino rotulo="Hoje" registro={registroHoje} destaque />
       {registroAmanha ? (
         <CartaoTreino rotulo="Amanhã" registro={registroAmanha} />
       ) : (
         <CartaoCicloForaDoIntervalo variante="semAmanha" />
       )}
+      {registroHoje && <FaseCiclo fases={fasesEmOrdem(registrosValidos)} faseAtual={registroHoje.fase} />}
     </div>
   )
 }
@@ -73,25 +84,20 @@ function App() {
   const registrosValidos = registrosOrdenados.filter((r) => r.dataValida)
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
-      <header className="sticky top-0 z-10 border-b border-slate-200/70 bg-white/80 backdrop-blur dark:border-slate-800/70 dark:bg-slate-900/80">
+    <div className="min-h-screen bg-giz dark:bg-grafite">
+      <header className="sticky top-0 z-10 border-b border-grafite/10 bg-giz/90 backdrop-blur dark:border-giz/10 dark:bg-grafite/90">
         <div className="mx-auto flex max-w-xl items-center justify-between gap-2 px-4 py-3">
           <div className="flex items-center gap-2">
-            <span
-              className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 text-lg"
-              aria-hidden="true"
-            >
-              🏃
-            </span>
-            <h1 className="text-lg font-bold text-slate-800 dark:text-slate-100">Treino do Dia</h1>
+            <IconePista className="h-6 w-6 text-pista" />
+            <h1 className="font-display text-xl tracking-wide text-grafite dark:text-giz">Treino do Dia</h1>
           </div>
           <div className="flex items-center gap-2">
             <BotaoAlternarTema />
             <BotaoCarregarCiclo
-              texto="Carregar/atualizar ciclo"
+              texto="Atualizar"
               onCarregado={handleCicloCarregado}
               onErro={setErro}
-              className="rounded-full bg-indigo-600 px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition-colors active:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-pista px-3 py-2 font-mono text-xs font-semibold uppercase tracking-wideish text-giz transition-colors active:bg-pista-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pista focus-visible:ring-offset-2 dark:focus-visible:ring-offset-grafite"
             />
           </div>
         </div>
@@ -107,10 +113,10 @@ function App() {
         )}
 
         <section>
-          <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+          <h2 className="mb-3 font-mono text-xs font-semibold uppercase tracking-wideish text-grafite/40 dark:text-giz/40">
             Ciclo completo
           </h2>
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:shadow-none">
+          <div className="overflow-hidden rounded-xl border border-grafite/10 bg-giz-soft dark:border-giz/10 dark:bg-grafite-soft">
             <ListaCicloCompleto registros={registrosOrdenados} />
           </div>
         </section>

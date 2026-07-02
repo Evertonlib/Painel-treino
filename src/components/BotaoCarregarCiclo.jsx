@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { lerArquivoCsv } from '../lib/parseCsv.js'
 import { normalizarCiclo } from '../lib/modeloCiclo.js'
 import { salvarCiclo } from '../lib/armazenamentoLocal.js'
+import { IconeUpload } from './icones.jsx'
 
 const MENSAGENS_ERRO = {
   'arquivo vazio ou ilegível':
@@ -46,9 +47,10 @@ function BotaoCarregarCiclo({ onCarregado, onErro, texto = 'Carregar ciclo', cla
         onClick={() => inputRef.current?.click()}
         className={
           className ||
-          'rounded-full bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm shadow-indigo-200 transition-colors active:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 dark:shadow-none dark:focus-visible:ring-offset-slate-900'
+          'inline-flex items-center gap-2 rounded-lg bg-pista px-5 py-3 font-mono text-sm font-semibold uppercase tracking-wideish text-giz transition-colors active:bg-pista-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pista focus-visible:ring-offset-2 dark:focus-visible:ring-offset-grafite'
         }
       >
+        <IconeUpload className="h-4 w-4" />
         {texto}
       </button>
       <input

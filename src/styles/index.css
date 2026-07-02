@@ -1,9 +1,43 @@
+/* Apenas o subset "latin" (cobre os acentos do português: á ã ç é ô etc.) —
+   "latin-ext" só acrescenta glifos da Europa Central/Oriental, sem uso aqui,
+   e evitá-lo mantém o precache do PWA menor. */
+@import '@fontsource/bebas-neue/latin.css';
+@import '@fontsource/inter/latin-400.css';
+@import '@fontsource/inter/latin-500.css';
+@import '@fontsource/inter/latin-600.css';
+@import '@fontsource/inter/latin-700.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/ibm-plex-mono/latin-500.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   body {
-    @apply antialiased text-slate-800 dark:bg-slate-950 dark:text-slate-100;
+    @apply bg-giz text-grafite antialiased dark:bg-grafite dark:text-giz;
+    font-feature-settings: 'tnum' 1, 'lnum' 1;
+  }
+
+  :focus-visible {
+    outline: 2px solid theme('colors.pista.DEFAULT');
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  .font-tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }

@@ -1,5 +1,6 @@
 import { obterEstiloTreino } from '../lib/estiloTreino.js'
 import { hojeLocal, localParaDataISO } from '../lib/datas.js'
+import { IconeAlerta } from './icones.jsx'
 
 function ItemDiaCiclo({ registro }) {
   const estilo = obterEstiloTreino(registro.tipo)
@@ -8,34 +9,43 @@ function ItemDiaCiclo({ registro }) {
   return (
     <li
       className={
-        'flex gap-3 border-b border-slate-100 px-3 py-3 last:border-0 dark:border-slate-800 ' +
-        (ehHoje ? 'bg-indigo-50/70 dark:bg-indigo-950/30' : '')
+        'flex gap-3 border-b border-grafite/10 px-3 py-2.5 last:border-0 dark:border-giz/10 ' +
+        (ehHoje ? 'bg-pista/5' : '')
       }
     >
-      <span className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full ${estilo.ponto}`} aria-hidden="true" />
+      <span
+        className="mt-0.5 w-1 shrink-0 self-stretch rounded-full"
+        style={{ backgroundColor: estilo.cor }}
+        aria-hidden="true"
+      />
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2 text-xs text-slate-400 dark:text-slate-500">
-          <span className="truncate">
-            {registro.dia} · {registro.dataTexto} · {registro.fase}
-          </span>
+        <div className="flex items-center gap-2 font-mono text-[11px] tracking-wide text-grafite/50 dark:text-giz/50">
+          <span className="font-tabular">{registro.dataTexto}</span>
+          <span>{registro.dia}</span>
+          <span className="truncate text-grafite/35 dark:text-giz/35">{registro.fase}</span>
           {ehHoje && (
-            <span className="shrink-0 rounded-full bg-indigo-600 px-2 py-0.5 text-[10px] font-bold text-white">
-              HOJE
+            <span className="ml-auto shrink-0 rounded bg-pista px-1.5 py-0.5 text-[10px] font-semibold uppercase text-giz">
+              Hoje
             </span>
           )}
           {!registro.dataValida && (
-            <span className="shrink-0 text-xs font-semibold text-amber-600 dark:text-amber-500" title="data não reconhecida">
-              ⚠ data inválida
+            <span className="ml-auto flex shrink-0 items-center gap-1 text-amber-600" title="data não reconhecida">
+              <IconeAlerta className="h-3 w-3" />
+              inválida
             </span>
           )}
         </div>
-        <div className="font-semibold text-slate-800 dark:text-slate-100">{registro.tipo}</div>
-        <p className="line-clamp-2 text-sm text-slate-600 dark:text-slate-400">{registro.treino}</p>
-        <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-slate-500 dark:text-slate-500">
-          <span>⏱️ {registro.tempo} min</span>
-          <span>RPE {registro.rpe}</span>
-          {registro.forca && <span>🏋️ Força</span>}
+
+        <div className="mt-0.5 flex items-baseline justify-between gap-2">
+          <span className="truncate font-display text-lg leading-tight tracking-wide" style={{ color: estilo.cor }}>
+            {registro.tipo}
+          </span>
+          <span className="shrink-0 font-mono font-tabular text-xs text-grafite/60 dark:text-giz/60">
+            {registro.tempo}min · RPE {registro.rpe}
+          </span>
         </div>
+
+        <p className="line-clamp-1 text-xs text-grafite/60 dark:text-giz/60">{registro.treino}</p>
       </div>
     </li>
   )

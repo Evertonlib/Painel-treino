@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { obterTemaPreferido, salvarTemaPreferido, aplicarTemaNoDocumento } from '../lib/tema.js'
+import { IconeSol, IconeLua } from './icones.jsx'
 
 function BotaoAlternarTema({ className = '' }) {
   const [tema, setTema] = useState(() => obterTemaPreferido())
@@ -26,10 +27,10 @@ function BotaoAlternarTema({ className = '' }) {
       aria-pressed={escuro}
       className={
         className ||
-        'flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-base shadow-sm transition-colors active:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 dark:border-slate-700 dark:bg-slate-800 dark:active:bg-slate-700 dark:focus-visible:ring-offset-slate-900'
+        'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-grafite/15 text-grafite/70 transition-colors active:bg-grafite/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pista focus-visible:ring-offset-2 dark:border-giz/15 dark:text-giz/70 dark:active:bg-giz/5 dark:focus-visible:ring-offset-grafite'
       }
     >
-      <span aria-hidden="true">{escuro ? '☀️' : '🌙'}</span>
+      {escuro ? <IconeSol className="h-4 w-4" /> : <IconeLua className="h-4 w-4" />}
     </button>
   )
 }
