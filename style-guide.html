@@ -1,0 +1,716 @@
+<!-- CDN de fontes aceitável apenas aqui: este é um arquivo de consulta local,
+     nunca publicado no deploy (o deploy real usa @fontsource self-hosted,
+     ver DESIGN_SYSTEM.md secão 2.1). -->
+<title>Style Guide — Sistema Ritmo Certo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    /* Grafite (base escura) */
+    --grafite: #14171b;
+    --grafite-soft: #1c2025;
+    --grafite-line: #282d33;
+
+    /* Giz (base clara) */
+    --giz: #f3f1ea;
+    --giz-soft: #fbfaf6;
+    --giz-line: #e4e0d4;
+
+    /* Pista (marca) */
+    --pista: #d6482e;
+    --pista-soft: #f0d9d3;
+    --pista-dark: #b83a24;
+
+    /* Zonas de esforço */
+    --zona-z1: #4d7ea8;
+    --zona-z2: #3f9e83;
+    --zona-z3: #d7a233;
+    --zona-z4: #dd7a2c;
+    --zona-z5: #c73a2f;
+    --zona-forca: #7c5cbf;
+    --zona-off: #767d87;
+
+    /* Fontes */
+    --fonte-display: 'Bebas Neue', sans-serif;
+    --fonte-sans: 'Inter', sans-serif;
+    --fonte-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+    /* Papéis por tema — modo claro (padrão) */
+    --cor-fundo: var(--giz);
+    --cor-texto: var(--grafite);
+    --cor-cartao: var(--giz-soft);
+    --cor-borda: rgba(20, 23, 27, 0.1);
+  }
+
+  html.dark {
+    --cor-fundo: var(--grafite);
+    --cor-texto: var(--giz);
+    --cor-cartao: var(--grafite-soft);
+    --cor-borda: rgba(243, 241, 234, 0.1);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--cor-fundo);
+    color: var(--cor-texto);
+    font-family: var(--fonte-sans);
+    font-variant-numeric: tabular-nums;
+    transition: background 150ms, color 150ms;
+    padding-bottom: 80px;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--pista);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  .aviso {
+    background: var(--pista);
+    color: var(--giz);
+    text-align: center;
+    font-family: var(--fonte-mono);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    padding: 8px 16px;
+  }
+
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  section {
+    margin: 56px 0;
+  }
+
+  h2 {
+    font-family: var(--fonte-display);
+    font-size: 28px;
+    letter-spacing: 0.02em;
+    border-bottom: 1px solid var(--cor-borda);
+    padding-bottom: 8px;
+    margin-bottom: 24px;
+  }
+
+  h3 {
+    font-family: var(--fonte-mono);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    opacity: 0.6;
+    margin: 32px 0 16px;
+  }
+
+  /* --- Header (3.5) --- */
+  header.demo-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: color-mix(in srgb, var(--cor-fundo) 90%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--cor-borda);
+  }
+  header.demo-header .inner {
+    max-width: 576px;
+    margin: 0 auto;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  header.demo-header .marca {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  header.demo-header .marca svg { color: var(--pista); width: 24px; height: 24px; }
+  header.demo-header .marca span {
+    font-family: var(--fonte-display);
+    font-size: 20px;
+    letter-spacing: 0.02em;
+  }
+  header.demo-header .acoes {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  /* --- Paleta --- */
+  .paleta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .swatch {
+    border: 1px solid var(--cor-borda);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--cor-cartao);
+  }
+  .swatch__cor {
+    height: 72px;
+  }
+  .swatch__info {
+    padding: 10px 12px;
+  }
+  .swatch__nome {
+    font-family: var(--fonte-sans);
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .swatch__hex {
+    font-family: var(--fonte-mono);
+    font-size: 12px;
+    opacity: 0.6;
+  }
+  .swatch__uso {
+    font-size: 12px;
+    opacity: 0.7;
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  /* --- Zonas em destaque --- */
+  .zonas-destaque {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .zona-pill {
+    flex: 1 1 100px;
+    border-radius: 12px;
+    padding: 16px 12px;
+    text-align: center;
+    color: var(--giz);
+    font-family: var(--fonte-mono);
+  }
+  .zona-pill strong {
+    display: block;
+    font-family: var(--fonte-display);
+    font-size: 24px;
+    letter-spacing: 0.02em;
+  }
+  .zona-pill span { font-size: 11px; opacity: 0.9; }
+  .zonas-seta {
+    text-align: center;
+    font-family: var(--fonte-mono);
+    font-size: 12px;
+    opacity: 0.5;
+    margin-top: 8px;
+    letter-spacing: 0.04em;
+  }
+
+  /* --- Tipografia --- */
+  .tipo-card {
+    border: 1px solid var(--cor-borda);
+    border-radius: 12px;
+    background: var(--cor-cartao);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .tipo-card .amostra { font-size: 28px; margin-bottom: 8px; }
+  .tipo-card .amostra.display { font-family: var(--fonte-display); letter-spacing: 0.02em; }
+  .tipo-card .amostra.sans { font-family: var(--fonte-sans); font-size: 16px; }
+  .tipo-card .amostra.mono { font-family: var(--fonte-mono); font-size: 16px; }
+  .tipo-card .meta {
+    font-family: var(--fonte-mono);
+    font-size: 12px;
+    opacity: 0.6;
+  }
+
+  /* --- Régua de Zona (3.1) --- */
+  .regua-zona__trilho { display: flex; gap: 2px; height: 10px; }
+  .regua-zona__trilho.compacta { height: 6px; }
+  .regua-zona__seg {
+    flex: 1 1 0;
+    border-radius: 9999px;
+    opacity: 0.22;
+    transition: opacity 150ms;
+  }
+  .regua-zona__seg--ativo { opacity: 1; }
+  .regua-zona__rotulos {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
+    font-family: var(--fonte-mono);
+    font-size: 10px;
+    letter-spacing: 0.02em;
+    opacity: 0.4;
+  }
+  .regua-demo { max-width: 320px; margin-bottom: 32px; }
+  .regua-demo .rotulo-estado {
+    font-family: var(--fonte-mono);
+    font-size: 11px;
+    opacity: 0.6;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  /* --- Cartão de Treino (3.2) --- */
+  .cartao-treino {
+    position: relative;
+    border-radius: 12px;
+    border: 1px solid var(--cor-borda);
+    background: var(--cor-cartao);
+    overflow: hidden;
+    padding: 16px 16px 16px 20px;
+    max-width: 420px;
+    margin-bottom: 24px;
+  }
+  .cartao-treino__barra {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+  }
+  .cartao-treino__linha-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .badge {
+    font-family: var(--fonte-mono);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+  .badge--destacado {
+    background: var(--pista);
+    color: var(--giz);
+  }
+  .badge--normal {
+    background: transparent;
+    border: 1px solid rgba(214, 72, 46, 0.4);
+    color: var(--pista);
+  }
+  .cartao-treino__meta {
+    font-family: var(--fonte-mono);
+    font-size: 11px;
+    opacity: 0.5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cartao-treino__titulo {
+    font-family: var(--fonte-display);
+    font-size: 28px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    margin: 0 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .cartao-treino__descricao {
+    font-family: var(--fonte-sans);
+    font-size: 14px;
+    line-height: 1.6;
+    opacity: 0.8;
+    margin: 12px 0;
+  }
+  .cartao-treino__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    background: rgba(128,128,128,0.05);
+    border: 1px solid var(--cor-borda);
+    border-radius: 9999px;
+    padding: 4px 10px;
+    font-family: var(--fonte-mono);
+    font-size: 12px;
+    font-weight: 500;
+    opacity: 0.7;
+  }
+  html.dark .chip { background: rgba(255,255,255,0.05); }
+
+  /* --- Botão primário (3.3) --- */
+  .btn-primario {
+    background: var(--pista);
+    color: var(--giz);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: var(--fonte-mono);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+  }
+  .btn-primario:active { background: var(--pista-dark); }
+
+  /* --- Botão alternar tema (3.4) --- */
+  .btn-tema {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: transparent;
+    border: 1px solid rgba(128,128,128,0.15);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--cor-texto);
+    opacity: 0.9;
+  }
+  .btn-tema svg { width: 18px; height: 18px; stroke: currentColor; opacity: 0.7; }
+
+  /* --- Botão flutuante de alternância global de tema --- */
+  .toggle-global {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 20;
+  }
+
+  code.inline {
+    font-family: var(--fonte-mono);
+    font-size: 12px;
+    background: rgba(128,128,128,0.12);
+    padding: 2px 5px;
+    border-radius: 4px;
+  }
+</style>
+
+<div class="aviso">
+  Prova visual local do design system. Não é publicada no deploy (o deploy do Painel-treino sobe apenas dist/).
+</div>
+
+<header class="demo-header">
+  <div class="inner">
+    <div class="marca">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"></circle>
+        <path d="M12 3a9 9 0 0 1 0 18"></path>
+      </svg>
+      <span>Treino do Dia</span>
+    </div>
+    <div class="acoes">
+      <button class="btn-tema" aria-label="Alternar tema" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+        </svg>
+      </button>
+      <button class="btn-primario" type="button">Atualizar</button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section id="paleta">
+    <h2>1. Paleta de cores</h2>
+
+    <h3>Grafite</h3>
+    <div class="paleta-grid">
+      <div class="swatch">
+        <div class="swatch__cor" style="background:#14171b"></div>
+        <div class="swatch__info">
+          <div class="swatch__nome">Grafite</div>
+          <div class="swatch__hex">#14171b</div>
+          <div class="swatch__uso">Cor base do tema escuro (fundo de página) e cor de texto no tema claro</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__cor" style="background:#1c2025"></div>
+        <div class="swatch__info">
+          <div class="swatch__nome">Grafite soft</div>
+          <div class="swatch__hex">#1c2025</div>
+          <div class="swatch__uso">Fundo de cartões/superfícies elevadas no tema escuro</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__cor" style="background:#282d33"></div>
+        <div class="swatch__info">
+          <div class="swatch__nome">Grafite line</div>
+          <div class="swatch__hex">#282d33</div>
+          <div class="swatch__uso">Bordas/divisores no tema escuro</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Giz</h3>
+    <div class="paleta-grid">
+      <div class="swatch">
+        <div class="swatch__cor" style="background:#f3f1ea"></div>
+        <div class="swatch__info">
+          <div class="swatch__nome">Giz</div>
+          <div class="swatch__hex">#f3f1ea</div>
+          <div class="swatch__uso">Cor base do tema claro (fundo de página) e cor de texto no tema escuro</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__cor" style="background:#fbfaf6"></div>
+        <div class="swatch__info">
+          <div class="swatch__nome">Giz soft</div>
+          <div class="swatch__hex">#fbfaf6</div>
+          <div class="swatch__uso">Fundo de cartões/superfícies elevadas no tema claro</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__cor" style="background:#e4e0d4"></div>
+        <div class="swatch__info">
+          <div class="swatch__nome">Giz line</div>
+          <div class="swatch__hex">#e4e0d4</div>
+          <div class="swatch__uso">Bordas/divisores no tema claro</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Pista</h3>
+    <div class="paleta-grid">
+      <div class="swatch">
+        <div class="swatch__cor" style="background:#d6482e"></div>
+        <div class="swatch__info">
+          <div class="swatch__nome">Pista</div>
+          <div class="swatch__hex">#d6482e</div>
+          <div class="swatch__uso">Cor de marca/destaque: ícone principal, botão primário, badge ativo, anel de foco</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__cor" style="background:#f0d9d3"></div>
+        <div class="swatch__info">
+          <div class="swatch__nome">Pista soft</div>
+          <div class="swatch__hex">#f0d9d3</div>
+          <div class="swatch__uso">Tom suave da marca, para fundos leves/realces sutis</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__cor" style="background:#b83a24"></div>
+        <div class="swatch__info">
+          <div class="swatch__nome">Pista dark</div>
+          <div class="swatch__hex">#b83a24</div>
+          <div class="swatch__uso">Estado pressionado/ativo do botão primário (hover/active)</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Zonas</h3>
+    <div class="paleta-grid">
+      <div class="swatch">
+        <div class="swatch__cor" style="background:#4d7ea8"></div>
+        <div class="swatch__info">
+          <div class="swatch__nome">Zona 1</div>
+          <div class="swatch__hex">#4d7ea8</div>
+          <div class="swatch__uso">Esforço leve / recuperação (azul)</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__cor" style="background:#3f9e83"></div>
+        <div class="swatch__info">
+          <div class="swatch__nome">Zona 2</div>
+          <div class="swatch__hex">#3f9e83</div>
+          <div class="swatch__uso">Aeróbico leve (verde)</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__cor" style="background:#d7a233"></div>
+        <div class="swatch__info">
+          <div class="swatch__nome">Zona 3</div>
+          <div class="swatch__hex">#d7a233</div>
+          <div class="swatch__uso">Aeróbico moderado (dourado) — também usada como cor neutra padrão quando o tipo de treino não se encaixa em nenhuma zona</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__cor" style="background:#dd7a2c"></div>
+        <div class="swatch__info">
+          <div class="swatch__nome">Zona 4</div>
+          <div class="swatch__hex">#dd7a2c</div>
+          <div class="swatch__uso">Limiar (laranja)</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__cor" style="background:#c73a2f"></div>
+        <div class="swatch__info">
+          <div class="swatch__nome">Zona 5</div>
+          <div class="swatch__hex">#c73a2f</div>
+          <div class="swatch__uso">Máxima intensidade (vermelho) — também usada para treinos de VO2máx</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Força</h3>
+    <div class="paleta-grid">
+      <div class="swatch">
+        <div class="swatch__cor" style="background:#7c5cbf"></div>
+        <div class="swatch__info">
+          <div class="swatch__nome">Força</div>
+          <div class="swatch__hex">#7c5cbf</div>
+          <div class="swatch__uso">Treino de força (roxo)</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Off</h3>
+    <div class="paleta-grid">
+      <div class="swatch">
+        <div class="swatch__cor" style="background:#767d87"></div>
+        <div class="swatch__info">
+          <div class="swatch__nome">Off</div>
+          <div class="swatch__hex">#767d87</div>
+          <div class="swatch__uso">Dia de descanso (cinza neutro)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="zonas-destaque">
+    <h2>Zonas de esforço — espectro Z1 → Z5</h2>
+    <div class="zonas-destaque">
+      <div class="zona-pill" style="background:#4d7ea8"><strong>Z1</strong><span>Recuperação</span></div>
+      <div class="zona-pill" style="background:#3f9e83"><strong>Z2</strong><span>Aeróbico leve</span></div>
+      <div class="zona-pill" style="background:#d7a233"><strong>Z3</strong><span>Aeróbico moderado</span></div>
+      <div class="zona-pill" style="background:#dd7a2c"><strong>Z4</strong><span>Limiar</span></div>
+      <div class="zona-pill" style="background:#c73a2f"><strong>Z5</strong><span>Máxima intensidade</span></div>
+    </div>
+    <div class="zonas-seta">esforço crescente →</div>
+  </section>
+
+  <section id="tipografia">
+    <h2>2. Tipografia</h2>
+
+    <div class="tipo-card">
+      <div class="amostra display">Treino do Dia — Z3 Endurance</div>
+      <div class="meta">Bebas Neue (display) — títulos grandes, condensada e maiúscula-friendly. Usada no título do app no header e no nome do tipo de treino dentro do cartão.</div>
+    </div>
+
+    <div class="tipo-card">
+      <div class="amostra sans">Hoje é dia de rodagem leve, mantendo o ritmo confortável até os 10km finais.</div>
+      <div class="meta">Inter (sans) — texto corrido. Usada no corpo de página, descrição do treino e texto geral da interface.</div>
+    </div>
+
+    <div class="tipo-card">
+      <div class="amostra mono">HOJE · SEG 05/07 · FASE BASE · RPE 6</div>
+      <div class="meta">IBM Plex Mono (mono) — rótulos, badges, números e metadados. Usada no badge "Hoje"/"Amanhã", data/dia/fase, chips de tempo e RPE, rótulos das zonas.</div>
+    </div>
+  </section>
+
+  <section id="componentes">
+    <h2>3. Componentes-assinatura</h2>
+
+    <h3>Régua de Zona</h3>
+
+    <div class="regua-demo">
+      <div class="rotulo-estado">Ponto único (Z4)</div>
+      <div class="regua-zona__trilho">
+        <span class="regua-zona__seg" style="background:#4d7ea8"></span>
+        <span class="regua-zona__seg" style="background:#3f9e83"></span>
+        <span class="regua-zona__seg" style="background:#d7a233"></span>
+        <span class="regua-zona__seg regua-zona__seg--ativo" style="background:#dd7a2c"></span>
+        <span class="regua-zona__seg" style="background:#c73a2f"></span>
+      </div>
+      <div class="regua-zona__rotulos">
+        <span>Z1</span><span>Z2</span><span>Z3</span><span>Z4</span><span>Z5</span>
+      </div>
+    </div>
+
+    <div class="regua-demo">
+      <div class="rotulo-estado">Faixa (Z2, Z3, Z4 — Endurance)</div>
+      <div class="regua-zona__trilho">
+        <span class="regua-zona__seg" style="background:#4d7ea8"></span>
+        <span class="regua-zona__seg regua-zona__seg--ativo" style="background:#3f9e83"></span>
+        <span class="regua-zona__seg regua-zona__seg--ativo" style="background:#d7a233"></span>
+        <span class="regua-zona__seg regua-zona__seg--ativo" style="background:#dd7a2c"></span>
+        <span class="regua-zona__seg" style="background:#c73a2f"></span>
+      </div>
+      <div class="regua-zona__rotulos">
+        <span>Z1</span><span>Z2</span><span>Z3</span><span>Z4</span><span>Z5</span>
+      </div>
+    </div>
+
+    <div class="regua-demo">
+      <div class="rotulo-estado">Versão compacta (ponto único Z4, sem rótulos)</div>
+      <div class="regua-zona__trilho compacta">
+        <span class="regua-zona__seg" style="background:#4d7ea8"></span>
+        <span class="regua-zona__seg" style="background:#3f9e83"></span>
+        <span class="regua-zona__seg" style="background:#d7a233"></span>
+        <span class="regua-zona__seg regua-zona__seg--ativo" style="background:#dd7a2c"></span>
+        <span class="regua-zona__seg" style="background:#c73a2f"></span>
+      </div>
+    </div>
+
+    <h3>Cartão de Treino</h3>
+
+    <div class="cartao-treino">
+      <div class="cartao-treino__barra" style="background:#dd7a2c"></div>
+      <div class="cartao-treino__linha-topo">
+        <span class="badge badge--destacado">Hoje</span>
+        <span class="cartao-treino__meta">Seg · 06/07 · Fase Base</span>
+      </div>
+      <h4 class="cartao-treino__titulo" style="color:#dd7a2c">Z3 Endurance</h4>
+      <div class="regua-zona__trilho" style="max-width:100%">
+        <span class="regua-zona__seg" style="background:#4d7ea8"></span>
+        <span class="regua-zona__seg regua-zona__seg--ativo" style="background:#3f9e83"></span>
+        <span class="regua-zona__seg regua-zona__seg--ativo" style="background:#d7a233"></span>
+        <span class="regua-zona__seg regua-zona__seg--ativo" style="background:#dd7a2c"></span>
+        <span class="regua-zona__seg" style="background:#c73a2f"></span>
+      </div>
+      <p class="cartao-treino__descricao">Rodagem contínua em ritmo confortável, mantendo o esforço entre aeróbico moderado e limiar durante todo o percurso.</p>
+      <div class="cartao-treino__chips">
+        <span class="chip">⏱ 45 min</span>
+        <span class="chip">RPE 6</span>
+      </div>
+    </div>
+
+    <div class="cartao-treino">
+      <div class="cartao-treino__barra" style="background:#767d87"></div>
+      <div class="cartao-treino__linha-topo">
+        <span class="badge badge--normal">Amanhã</span>
+        <span class="cartao-treino__meta">Ter · 07/07 · Fase Base</span>
+      </div>
+      <h4 class="cartao-treino__titulo">Descanso</h4>
+      <p class="cartao-treino__descricao">Dia de recuperação completa, sem treino programado.</p>
+    </div>
+
+    <h3>Botão primário e botão de alternar tema</h3>
+    <div style="display:flex; gap:12px; align-items:center;">
+      <button class="btn-primario" type="button">Atualizar</button>
+      <button class="btn-tema" aria-label="Alternar tema" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+        </svg>
+      </button>
+    </div>
+
+    <h3>Cabeçalho</h3>
+    <p style="font-size:13px; opacity:0.7;">Ver reconstrução no topo desta página (<code class="inline">position: sticky</code>, fundo semitransparente + blur).</p>
+  </section>
+
+</main>
+
+<button class="btn-primario toggle-global" id="toggle-tema-global" type="button">Alternar tema</button>
+
+<script>
+  // Ordem de resolução conforme DESIGN_SYSTEM.md 1.3, adaptada para esta prova local
+  // (não persiste em localStorage, pois é apenas uma página de consulta isolada).
+  var raiz = document.documentElement;
+  var prefereEscuro = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (prefereEscuro) {
+    raiz.classList.add('dark');
+  }
+
+  document.getElementById('toggle-tema-global').addEventListener('click', function () {
+    raiz.classList.toggle('dark');
+  });
+</script>
