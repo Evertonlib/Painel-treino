@@ -33,11 +33,35 @@ do Despertar_BA26 — nome definido em um único lugar de configuração e um ú
 arquivos de ícone reaproveitado — é o que orienta as decisões abaixo, adaptado à
 arquitetura já existente no Painel-treino (nada do fluxo de build é reestruturado).
 
+## Causa raiz do "quadrado azul" no atalho do celular (achado da pesquisa)
+
+Ao buildar o projeto (`npm run build`) e inspecionar o `manifest.webmanifest` gerado,
+confirmou-se que os caminhos dos ícones estão corretos e os arquivos são copiados
+normalmente para `dist/icons/` — não é um problema de caminho quebrado ou 404. A causa é
+outra: **nenhum ícone do manifest tem o campo `"purpose": "maskable"`**.
+
+Sem um ícone declarado como maskable, no Android 13+ com o recurso "Ícones com tema"
+(Material You / themed icons) ativado — que vem ligado por padrão em muitos aparelhos —,
+o sistema ignora o desenho colorido do ícone e usa só a silhueta/alpha dele, repintando o
+ícone inteiro com a cor de destaque do sistema (derivada do papel de parede, muitas vezes
+azul por padrão). Como o desenho atual é um traçado fino sobre fundo quase preto, sem
+margem de segurança (safe zone), o resultado da repintura vira, na prática, um quadrado
+quase sólido de uma cor só — o "quadrado azul vazio" relatado, visível **só no atalho
+instalado**, porque é o único lugar que passa por esse pipeline de ícone adaptável do
+Android. Dentro do app (favicon, cabeçalho, `IconePista`) o desenho aparece normal porque
+esses usos não passam pela mascarização adaptável do Android.
+
+Isso passa a ser parte do escopo da Mudança 2: o novo ícone precisa (a) ser declarado no
+manifest com `purpose` incluindo `maskable`, e (b) ser desenhado com margem de segurança
+suficiente (a arte principal ocupando a região central seguindo a zona segura recomendada
+para ícones adaptáveis do Android, deixando espaço ao redor para o recorte do sistema),
+para que a repintura/recorte do Android não vire um bloco de cor sem forma reconhecível.
+
 ## Arquivos afetados
 
 | Arquivo | O que muda |
 |---|---|
-| `vite.config.js` | `manifest.name` e `manifest.short_name` (hoje `"Treino do Dia"`) passam a refletir o novo nome. `manifest.icons` e `includeAssets` continuam apontando para `icons/icon-192.png` e `icons/icon-512.png` (mesmos nomes de arquivo, conteúdo novo). |
+| `vite.config.js` | `manifest.name` e `manifest.short_name` (hoje `"Treino do Dia"`) passam a refletir o novo nome. `manifest.icons` e `includeAssets` continuam apontando para `icons/icon-192.png` e `icons/icon-512.png` (mesmos nomes de arquivo, conteúdo novo), e cada entrada de ícone passa a declarar `purpose` incluindo `maskable` (ver seção "Causa raiz do quadrado azul"). |
 | `index.html` | `<title>` (hoje `Treino do Dia`) passa a refletir o novo nome. A tag `<link rel="icon">` passa a apontar para o novo ícone PNG em vez do `favicon.svg` atual (ver seção "Premissas assumidas"). |
 | `src/App.jsx` | Texto do `<h1>` no cabeçalho do app (hoje `Treino do Dia`, linha do header sticky). |
 | `src/components/TelaCarregarCiclo.jsx` | Texto do `<h1>` na tela inicial de carregar CSV (hoje `Treino do Dia`). |
@@ -110,15 +134,19 @@ arquitetura já existente no Painel-treino (nada do fluxo de build é reestrutur
    não no ícone decorativo ao lado do título dentro da interface. Assume-se que esse ícone
    de UI permanece como está. Se a intenção for que o corredor também substitua esse ícone
    inline, é preciso um novo componente SVG e isso passa a ser um item adicional de escopo.
-3. **A descrição atual do ícone atual ("quadrado azul vazio") não corresponde exatamente ao
-   que foi encontrado no repositório.** O `icon-192.png`/`icon-512.png` atuais mostram o
-   mesmo desenho de "pista" (oval laranja/vermelho sobre fundo escuro) usado no
-   `favicon.svg` e no ícone `IconePista` — não um quadrado azul vazio. Assume-se que o
-   ícone a ser substituído é este (o desenho de pista atual), e não outro arquivo não
-   encontrado na pesquisa.
-4. **Os arquivos finais do novo ícone (192px e 512px) serão entregues prontos**, no formato
-   e tamanho corretos para uso direto em `public/icons/`, sem necessidade de processamento
-   adicional (recorte, geração de múltiplos tamanhos, etc.) no momento da implementação.
+3. **O "quadrado azul vazio" descrito no pedido é o resultado do recurso "Ícones com
+   tema" do Android sobre o ícone atual, não um arquivo diferente.** O `icon-192.png`/
+   `icon-512.png` atuais mostram o mesmo desenho de "pista" usado no `favicon.svg` e no
+   ícone `IconePista` (oval laranja/vermelho sobre fundo escuro). Sem `purpose: maskable`
+   e sem margem de segurança, o Android recorta/repinta esse desenho no atalho instalado e
+   o resultado visual vira um bloco de cor sólida — ver seção "Causa raiz do quadrado
+   azul". Assume-se que o ícone a ser substituído é este mesmo arquivo (o desenho de pista
+   atual), e não outro arquivo de fallback não encontrado na pesquisa.
+4. **Os arquivos finais do novo ícone (192px e 512px) serão entregues prontos**, já
+   desenhados com margem de segurança (safe zone) suficiente para uso como ícone
+   maskable, no formato e tamanho corretos para uso direto em `public/icons/`, sem
+   necessidade de processamento adicional (recorte, geração de múltiplos tamanhos, etc.)
+   no momento da implementação.
 5. **`README.md` é atualizado por consistência**, mesmo não tendo sido citado
    explicitamente no pedido, porque é a porta de entrada de quem abre o repositório e cita
    o nome do app no título. Os links para os documentos históricos (PRD/SPEC antigos) não
@@ -141,11 +169,15 @@ arquitetura já existente no Painel-treino (nada do fluxo de build é reestrutur
 - **Arquivos de ícone ainda não entregues.** Até a entrega dos arquivos finais de 192px e
   512px, a implementação desta melhoria fica bloqueada apenas na parte do ícone; a parte do
   nome pode ser implementada de forma independente.
-- **Divergência de descrição do ícone atual.** Como o ícone hoje encontrado no repositório
-  não é um "quadrado azul vazio" como descrito no pedido, existe o risco de estarmos
-  planejando a substituição do arquivo errado, caso exista algum outro estado do ícone
-  (por exemplo, um ícone de fallback do navegador) que não foi encontrado na pesquisa do
-  código-fonte.
+- **Ícone novo repetir o mesmo problema, se entregue sem margem de segurança.** Se os
+  arquivos de 192px/512px do "Timeline de Passada" forem entregues com a arte encostando
+  nas bordas (sem safe zone), o mesmo efeito de recorte/repintura em "Ícones com tema" do
+  Android pode voltar a deixar o atalho parecendo um bloco de cor sólida, mesmo com o
+  `purpose: maskable` declarado corretamente no manifest.
+- **Comportamento de "Ícones com tema" varia por aparelho e versão do Android.** Mesmo com
+  `purpose: maskable` e boa margem de segurança, alguns lançadores (launchers) Android
+  aplicam a repintura de forma mais agressiva que outros; o resultado final pode não ficar
+  idêntico em todos os aparelhos, e isso foge do controle do código do app.
 
 ## Critérios de aceitação
 
@@ -172,46 +204,61 @@ arquitetura já existente no Painel-treino (nada do fluxo de build é reestrutur
    desenho "Timeline de Passada" (corredor sobre barra de progressão), e não o desenho de
    pista/oval atual.
 
-6. **Favicon na aba do navegador.** Dado que o app é aberto em um navegador desktop, quando
+6. **Ícone do atalho não vira bloco de cor sólida em Android com "Ícones com tema".** Dado
+   um aparelho Android 13+ com o recurso "Ícones com tema" ativado, quando o app é
+   instalado na tela inicial após a troca do ícone e a adição de `purpose: maskable` no
+   manifest, o atalho deve mostrar uma forma reconhecível do desenho "Timeline de Passada"
+   (ainda que recolorido pelo sistema), e não um quadrado de cor sólida sem forma alguma —
+   reproduzindo o problema relatado antes da melhoria.
+
+7. **Favicon na aba do navegador.** Dado que o app é aberto em um navegador desktop, quando
    a página carrega, o ícone exibido na aba deve corresponder ao novo ícone "Timeline de
    Passada" (via `icon-192.png`), e não ao `favicon.svg` de pista atual.
 
-7. **Lógica do app permanece intacta.** Dado um arquivo CSV de ciclo válido, quando ele é
+8. **Lógica do app permanece intacta.** Dado um arquivo CSV de ciclo válido, quando ele é
    carregado após a mudança de nome/ícone, o app deve continuar calculando e exibindo
    corretamente o treino de hoje, de amanhã, a fase do ciclo e a régua de zona — sem
    nenhuma diferença de comportamento em relação a antes da melhoria.
 
-8. **Dados já salvos não são perdidos.** Dado um usuário que já tinha um ciclo carregado
+9. **Dados já salvos não são perdidos.** Dado um usuário que já tinha um ciclo carregado
    antes da atualização (dado salvo sob a chave `treinoDoDia:ciclo:v1`), quando ele abre o
    app após a atualização de nome/ícone, o ciclo salvo deve continuar aparecendo
    normalmente, sem pedir para recarregar o CSV.
 
-9. **Preferência de tema já salva não é perdida.** Dado um usuário que já tinha escolhido
-   tema claro ou escuro antes da atualização (chave `treinoDoDia:tema:v1`), quando ele abre
-   o app após a atualização, o tema escolhido deve continuar sendo respeitado.
+10. **Preferência de tema já salva não é perdida.** Dado um usuário que já tinha escolhido
+    tema claro ou escuro antes da atualização (chave `treinoDoDia:tema:v1`), quando ele abre
+    o app após a atualização, o tema escolhido deve continuar sendo respeitado.
 
-10. **Build de produção não quebra.** Dado o comando `npm run build`, quando ele é
+11. **Build de produção não quebra.** Dado o comando `npm run build`, quando ele é
     executado após as mudanças, o build deve concluir sem erros e gerar a pasta `dist/`
     normalmente, incluindo o `manifest.webmanifest` com o novo nome e os novos ícones.
 
-11. **Deploy continua publicando no mesmo endereço.** Dado o comando `npm run deploy`,
+12. **Deploy continua publicando no mesmo endereço.** Dado o comando `npm run deploy`,
     quando ele é executado após as mudanças, o app deve continuar publicado sob o mesmo
     caminho `/Painel-treino/` no GitHub Pages, sem mudança de URL.
 
-12. **Cenário de erro — arquivo de ícone ausente ou corrompido.** Dado que um dos arquivos
+13. **Cenário de erro — arquivo de ícone ausente ou corrompido.** Dado que um dos arquivos
     novos de ícone (192px ou 512px) não é entregue, está corrompido, ou não abre como
     imagem válida, quando o build é executado, ele deve ou falhar de forma visível (erro no
     `npm run build`) ou, se não falhar, o ícone exibido no app instalado deve ser
     perceptivelmente quebrado/em branco — em nenhum caso o app deve silenciosamente manter
     o ícone antigo sem que isso seja percebido como um problema pendente.
 
-13. **Cenário de erro — nome não atualizado em algum ponto.** Dado que, por engano, algum
+14. **Cenário de erro — ícone novo entregue sem margem de segurança.** Dado que os novos
+    arquivos de 192px/512px são entregues com a arte encostando nas bordas (sem safe
+    zone), quando o app é instalado em um Android com "Ícones com tema" ativado, se o
+    atalho voltar a parecer um bloco de cor sólida sem forma reconhecível, isso deve ser
+    tratado como um problema de design do arquivo de ícone (não do manifest/código) e o
+    arquivo deve ser reenviado com mais margem, em vez de se tentar compensar isso via
+    configuração.
+
+15. **Cenário de erro — nome não atualizado em algum ponto.** Dado que, por engano, algum
     dos quatro lugares de nome (título da aba, cabeçalho, tela inicial, manifest) não é
     atualizado, quando o app é revisado visualmente e via manifest gerado, essa
     inconsistência deve ser identificável comparando os quatro pontos listados nesta PRD —
     o critério de aceitação só é atendido quando os quatro estão consistentes entre si.
 
-14. **Cenário de erro — `style-guide.html` ou `DESIGN_SYSTEM.md` alterados por engano.**
+16. **Cenário de erro — `style-guide.html` ou `DESIGN_SYSTEM.md` alterados por engano.**
     Dado que a implementação toca em `style-guide.html` ou `DESIGN_SYSTEM.md`, quando o
     diff da mudança é revisado, isso deve ser tratado como um desvio do escopo desta
     melhoria e revertido, já que ambos os arquivos foram explicitamente definidos como "não
