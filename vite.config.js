@@ -9,10 +9,10 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icons/icon-192.png', 'icons/icon-512.png'],
+      includeAssets: ['icons/icone_cheio_512.png', 'icons/icone_seguro_512.png'],
       manifest: {
-        name: 'Treino do Dia',
-        short_name: 'Treino do Dia',
+        name: 'Sistema Ritmo Certo',
+        short_name: 'Ritmo Certo',
         description: 'Consulta rápida do treino de hoje e amanhã do seu ciclo.',
         theme_color: '#14171b',
         background_color: '#14171b',
@@ -21,14 +21,16 @@ export default defineConfig({
         scope: '/Painel-treino/',
         icons: [
           {
-            src: 'icons/icon-192.png',
-            sizes: '192x192',
-            type: 'image/png',
-          },
-          {
-            src: 'icons/icon-512.png',
+            src: 'icons/icone_cheio_512.png',
             sizes: '512x512',
             type: 'image/png',
+            purpose: 'any',
+          },
+          {
+            src: 'icons/icone_seguro_512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable',
           },
         ],
       },

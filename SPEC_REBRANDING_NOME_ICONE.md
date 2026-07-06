@@ -170,28 +170,83 @@ Após aplicar as mudanças, validar:
 
 ## Plano de Execução
 
-- [ ] Task 1 — Atualizar `vite.config.js`: `manifest.name`, `manifest.short_name`,
+- [x] Task 1 — Atualizar `vite.config.js`: `manifest.name`, `manifest.short_name`,
       `manifest.icons` (com `purpose: any`/`maskable`) e `includeAssets` para os dois
       novos arquivos de ícone.
-- [ ] Task 2 — Atualizar `index.html`: `<title>` e a tag `<link rel="icon">` (novo
+- [x] Task 2 — Atualizar `index.html`: `<title>` e a tag `<link rel="icon">` (novo
       `href` e `type="image/png"`).
-- [ ] Task 3 — Renomear `IconePista` para `IconePassada` em `src/components/icones.jsx`
+- [x] Task 3 — Renomear `IconePista` para `IconePassada` em `src/components/icones.jsx`
       e substituir o desenho SVG interno pelo novo ícone "Timeline de Passada".
-- [ ] Task 4 — Atualizar `src/App.jsx`: import, uso do componente de ícone e texto do
+- [x] Task 4 — Atualizar `src/App.jsx`: import, uso do componente de ícone e texto do
       `<h1>`.
-- [ ] Task 5 — Atualizar `src/components/TelaCarregarCiclo.jsx`: import, uso do
+- [x] Task 5 — Atualizar `src/components/TelaCarregarCiclo.jsx`: import, uso do
       componente de ícone e texto do `<h1>`.
-- [ ] Task 6 — Remover `public/icons/icon-192.png`, `public/icons/icon-512.png` e
+- [x] Task 6 — Remover `public/icons/icon-192.png`, `public/icons/icon-512.png` e
       `public/favicon.svg` do repositório.
-- [ ] Task 7 — Atualizar `README.md`: título e menções ao nome do app no texto corrido,
+- [x] Task 7 — Atualizar `README.md`: título e menções ao nome do app no texto corrido,
       preservando links para os documentos históricos.
-- [ ] Task 8 — Rodar `npm run build` e conferir o `manifest.webmanifest` gerado (nome,
+- [x] Task 8 — Rodar `npm run build` e conferir o `manifest.webmanifest` gerado (nome,
       nome curto, ícones e `purpose`); rodar `npm run lint`.
-- [ ] Task 9 — Verificação visual manual: `npm run dev`/`npm run preview`, comparar
+- [x] Task 9 — Verificação visual manual: `npm run dev`/`npm run preview`, comparar
       cabeçalho e tela inicial lado a lado, confirmar consistência do nome/ícone em
       todos os pontos e ausência de referências residuais a "Treino do Dia" ou
       `IconePista`.
 
 ## Desvios
 
-(seção vazia — será preenchida durante a implementação)
+Nenhum desvio do Spec foi necessário. Todas as tasks foram implementadas exatamente
+como descrito.
+
+Uma decisão de projeto foi tomada onde o Spec deixava espaço aberto: o desenho SVG
+interno do novo `IconePassada` (Task 3) não estava especificado traço a traço — o Spec
+descrevia apenas o conceito ("silhueta de corredor em passada sobre uma barra de
+progressão", mesma técnica dos demais ícones do arquivo). Foi desenhada uma versão
+composta por uma cabeça (`circle`), um corpo em passada com braços e pernas (`path` com
+múltiplos segmentos) e uma barra de progressão horizontal na base com um marcador
+preenchido (`circle` com `fill: currentColor`), usando `strokeWidth="2"` como no ícone
+antigo. Isso está dentro da Premissa 2 do PRD, que já previa que a fidelidade exata ao
+visual das referências PNG ficaria sujeita a ajuste após uma primeira versão.
+
+Verificação pós-implementação (seção "Verificação pós-implementação" do Spec) executada
+com sucesso:
+1. `npm run build` concluído sem erros; `dist/manifest.webmanifest` gerado com
+   `name: "Sistema Ritmo Certo"`, `short_name: "Ritmo Certo"` e os dois ícones com
+   `purpose: "any"`/`"maskable"` corretos.
+2. `npm run lint` (oxlint) sem erros.
+3. Verificação via `npm run preview`: `<title>`, favicon e HTML servidos corretamente
+   sob o `base` `/Painel-treino/`; ambos os arquivos de ícone respondem HTTP 200.
+4. `grep -rn "Treino do Dia"` e `grep -rn "IconePista"` em `src/`, `index.html` e
+   `vite.config.js` não retornaram nenhuma ocorrência.
+5. `git rm` aplicado a `public/icons/icon-192.png`, `public/icons/icon-512.png` e
+   `public/favicon.svg` — arquivos marcados como deletados no `git status`.
+
+**Correção sobre a Task 9 (registrada após revisão do usuário):** a primeira passagem
+por esta task só cobriu checagem técnica (status HTTP dos ícones, HTML bruto via
+`curl`) e não a comparação visual pedida pelo Spec — abrir de fato o app e olhar lado a
+lado o cabeçalho (com ciclo carregado) e a tela inicial (sem ciclo). Isso foi
+identificado e corrigido: o app foi executado com `npm run dev`, um ciclo real
+(`dados_do_ciclo.csv`) foi carregado via automação de navegador (Playwright, headless
+Chromium), e screenshots foram tiradas dos dois pontos de uso do ícone, em tema claro e
+escuro. Resultado: `IconePassada` renderiza corretamente como corredor em passada sobre
+barra de progressão em ambos os pontos (`TelaCarregarCiclo` e cabeçalho de `App.jsx`) e
+em ambos os temas; texto "Sistema Ritmo Certo" consistente nos dois lugares; nenhum erro
+de console. Essa checagem visual real, feita fora do fluxo normal desta tarefa (que roda
+em ambiente headless, sem navegador disponível por padrão), só foi executada depois que o
+usuário apontou que a verificação anterior era insuficiente.
+
+Nesse processo, um bug foi encontrado e corrigido num arquivo **fora do escopo formal
+desta melhoria**: ao aplicar manualmente (a pedido do usuário, fora do Plano de Execução)
+as mesmas mudanças de nome/ícone em `style-guide.html` para pré-visualização, o novo SVG
+foi copiado sem o atributo `stroke="currentColor"` no elemento `<svg>` raiz — sem ele,
+nada tem contorno visível (o padrão do SVG é `stroke: none`), sobrando só o `<circle>`
+final com `fill="currentColor"` explícito (um "pontinho vermelho"). Isso **não afeta** o
+componente React `IconePassada` em `src/components/icones.jsx`, que já herda
+`stroke: 'currentColor'` do objeto `base` compartilhado — confirmado visualmente nos
+screenshots acima. O `style-guide.html` foi corrigido para consistência da
+pré-visualização, mas segue fora do escopo do PRD/Spec (não é tocado pelas tasks formais
+listadas no Plano de Execução).
+
+Nenhum arquivo fora do escopo definido no PRD (`DESIGN_SYSTEM.md`, `style-guide.html`,
+`PRD_APP_TREINO_DO_DIA.md`, `SPEC_APP_TREINO_DO_DIA.md`, `package.json` `name`, chaves de
+`localStorage`, ou qualquer arquivo fora da pasta Painel-treino) foi tocado pelas tasks
+formais do Plano de Execução.

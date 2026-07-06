@@ -1,4 +1,4 @@
-# Treino do Dia
+# Sistema Ritmo Certo
 
 PWA leve para consulta rápida do treino de hoje e de amanhã, a partir de um ciclo de treino exportado em CSV. Feito para ser aberto no celular como um app instalado, sem backend: todo o ciclo carregado fica salvo no `localStorage` do navegador.
 

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import BotaoCarregarCiclo from './BotaoCarregarCiclo.jsx'
 import BotaoAlternarTema from './BotaoAlternarTema.jsx'
 import MensagemErro from './MensagemErro.jsx'
-import { IconePista } from './icones.jsx'
+import { IconePassada } from './icones.jsx'
 
 function TelaCarregarCiclo({ onCicloCarregado }) {
   const [erro, setErro] = useState(null)
@@ -13,10 +13,10 @@ function TelaCarregarCiclo({ onCicloCarregado }) {
         <BotaoAlternarTema />
       </div>
 
-      <IconePista className="h-12 w-12 text-pista" />
+      <IconePassada className="h-12 w-12 text-pista" />
 
       <div>
-        <h1 className="font-display text-4xl tracking-wide text-grafite dark:text-giz">Treino do Dia</h1>
+        <h1 className="font-display text-4xl tracking-wide text-grafite dark:text-giz">Sistema Ritmo Certo</h1>
         <p className="mx-auto mt-2 max-w-xs text-sm text-grafite/60 dark:text-giz/60">
           Selecione o arquivo CSV do seu ciclo de treino para ver o treino de hoje e de amanhã.
         </p>
