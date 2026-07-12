@@ -83,14 +83,3 @@ export function IconeUpload({ className = 'h-4 w-4', ...props }) {
     </svg>
   )
 }
-
-export function IconePassada({ className = 'h-6 w-6', ...props }) {
-  return (
-    <svg {...base} className={className} strokeWidth="2" {...props}>
-      <circle cx="13" cy="4.5" r="1.7" />
-      <path d="M12 7.2 10 11.5 13 13.5 11.5 17.5M10 11.5 7 15 3.5 17.5M12 7.2 15 7.5 17.5 5.5M12 7.2 8.5 7 6 8.5" />
-      <path d="M3 21h18" />
-      <circle cx="13" cy="21" r="1.2" fill="currentColor" stroke="none" />
-    </svg>
-  )
-}

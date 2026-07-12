@@ -9,7 +9,6 @@ import CartaoCicloForaDoIntervalo from './components/CartaoCicloForaDoIntervalo.
 import ListaCicloCompleto from './components/ListaCicloCompleto.jsx'
 import MensagemErro from './components/MensagemErro.jsx'
 import FaseCiclo from './components/FaseCiclo.jsx'
-import { IconePassada } from './components/icones.jsx'
 
 function ordenarRegistros(registros) {
   const validos = registros
@@ -88,7 +87,6 @@ function App() {
       <header className="sticky top-0 z-10 border-b border-grafite/10 bg-giz/90 backdrop-blur dark:border-giz/10 dark:bg-grafite/90">
         <div className="mx-auto flex max-w-xl items-center justify-between gap-2 px-4 py-3">
           <div className="flex items-center gap-2">
-            <IconePassada className="h-6 w-6 text-pista" />
             <h1 className="font-display text-xl tracking-wide text-grafite dark:text-giz">Sistema Ritmo Certo</h1>
           </div>
           <div className="flex items-center gap-2">

@@ -2,7 +2,6 @@ import { useState } from 'react'
 import BotaoCarregarCiclo from './BotaoCarregarCiclo.jsx'
 import BotaoAlternarTema from './BotaoAlternarTema.jsx'
 import MensagemErro from './MensagemErro.jsx'
-import { IconePassada } from './icones.jsx'
 
 function TelaCarregarCiclo({ onCicloCarregado }) {
   const [erro, setErro] = useState(null)
@@ -12,8 +11,6 @@ function TelaCarregarCiclo({ onCicloCarregado }) {
       <div className="absolute right-4 top-4">
         <BotaoAlternarTema />
       </div>
-
-      <IconePassada className="h-12 w-12 text-pista" />
 
       <div>
         <h1 className="font-display text-4xl tracking-wide text-grafite dark:text-giz">Sistema Ritmo Certo</h1>
