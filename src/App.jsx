@@ -115,7 +115,7 @@ function App() {
             Ciclo completo
           </h2>
           <div className="overflow-hidden rounded-xl border border-grafite/10 bg-giz-soft dark:border-giz/10 dark:bg-grafite-soft">
-            <ListaCicloCompleto registros={registrosOrdenados} />
+            <ListaCicloCompleto key={ciclo.carregadoEm} registros={registrosOrdenados} />
           </div>
         </section>
       </main>

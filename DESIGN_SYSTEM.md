@@ -317,6 +317,32 @@ junções de linha arredondadas (`stroke-linecap: round`,
 `stroke-linejoin: round`), cor herdada do texto ao redor
 (`stroke: currentColor`) — nunca uma cor fixa própria do ícone.
 
+### 3.7 Cartão de Semana (sanfona)
+
+Agrupa os dias da lista "Ciclo completo" por semana (bloco de 7 dias
+corridos a partir da primeira data válida do ciclo). Fica dentro do
+contêiner da seção, que já tem borda e cantos arredondados; cada semana
+é separada da seguinte por uma linha fina (cor de texto a 10%).
+
+- **Cabeçalho**: botão de largura total, `display: flex` com
+  `justify-content: space-between`, preenchimento ~12px × 10px. Rótulo
+  "Semana N" em fonte mono, ~12px, semi-negrito, maiúsculo,
+  `letter-spacing` levemente aberto (token "wideish"). À direita, uma
+  seta de texto (`▲` aberto, `▼` fechado), ~10px, só decorativa — o
+  estado vai em `aria-expanded` para leitor de tela.
+  - Estado **normal**: texto na cor padrão a 60% de opacidade.
+  - Estado **semana atual** (a que contém o dia de hoje): fundo Pista a
+    10% e texto Pista, mesmo tratamento do "atual" na régua de fases.
+    Não aparece quando hoje está fora do ciclo.
+  - Foco visível: anel de 2px Pista, desenhado para dentro (`inset`).
+- **Corpo**: quando aberto, a lista de dias da semana (mesma linha de
+  dia da lista de antes, sem alteração); quando fechado, não é exibido.
+- **Abertura**: cada semana abre e fecha de forma independente. Ao
+  carregar, abre só a semana de hoje (antes do ciclo: a Semana 1; depois
+  do ciclo: a última). Estado não é salvo e reinicia ao trocar de ciclo.
+- Dias com data inválida ficam numa seção própria ao fim, "Sem data
+  válida", sempre visível e sem número de semana.
+
 ---
 
 ## 4. Acessibilidade

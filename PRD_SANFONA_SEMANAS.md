@@ -455,3 +455,13 @@ Cada cenário abaixo descreve uma entrada e o resultado esperado.
     Resultado esperado: o build conclui sem erros, e o app publicado em
     `dist/` exibe a seção "Ciclo completo" já agrupada em cartões de
     semana, sem regressão visual nas demais telas.
+
+## Decisões do Everton (PRD aprovado em 10/10/2026)
+
+Todas as perguntas em aberto foram resolvidas aceitando a opção assumida como padrão:
+
+1. **Sem abas "Esta Semana" / "Ciclo Completo".** Apenas cartões de semana dentro da seção "Ciclo completo" já existente (`src/App.jsx` não ganha toggle).
+2. **Hoje antes do início do ciclo:** abre a Semana 1 por padrão.
+3. **Hoje depois do fim do ciclo:** abre a última semana por padrão.
+4. **Rótulo do cartão:** somente "Semana N".
+5. **Dias OFF filtrados e dias passados esmaecidos:** fora do escopo; ficam para uma melhoria futura.
