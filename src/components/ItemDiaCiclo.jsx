@@ -1,15 +1,27 @@
+import { useState } from 'react'
 import { obterEstiloTreino } from '../lib/estiloTreino.js'
 import { hojeLocal, localParaDataISO } from '../lib/datas.js'
 import { IconeAlerta } from './icones.jsx'
 
 function ItemDiaCiclo({ registro }) {
+  const [expandido, setExpandido] = useState(false)
   const estilo = obterEstiloTreino(registro.tipo)
   const ehHoje = registro.dataValida && registro.dataISO === localParaDataISO(hojeLocal())
 
   return (
     <li
+      role="button"
+      tabIndex={0}
+      aria-expanded={expandido}
+      onClick={() => setExpandido((v) => !v)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          setExpandido((v) => !v)
+        }
+      }}
       className={
-        'flex gap-3 border-b border-grafite/10 px-3 py-2.5 last:border-0 dark:border-giz/10 ' +
+        'flex cursor-pointer gap-3 border-b border-grafite/10 px-3 py-2.5 last:border-0 dark:border-giz/10 ' +
         (ehHoje ? 'bg-pista/5' : '')
       }
     >
@@ -45,7 +57,7 @@ function ItemDiaCiclo({ registro }) {
           </span>
         </div>
 
-        <p className="line-clamp-1 text-xs text-grafite/60 dark:text-giz/60">{registro.treino}</p>
+        <p className={(expandido ? '' : 'line-clamp-1 ') + 'text-xs text-grafite/60 dark:text-giz/60'}>{registro.treino}</p>
       </div>
     </li>
   )
